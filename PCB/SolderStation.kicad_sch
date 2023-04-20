@@ -2764,7 +2764,7 @@
     (effects (font (size 2.5908 2.5908) (thickness 0.5182) bold) (justify left bottom))
     (uuid 59b3f8cd-7f4e-4abd-99df-6d51a5b7d2f0)
   )
-  (text "A7 set to HIGH to power up IR LEDs" (at 36.83 111.125 0)
+  (text "A3 set to HIGH to power up IR LEDs" (at 36.83 111.125 0)
     (effects (font (size 1.27 1.27)) (justify left bottom))
     (uuid 5cea8bf4-db49-4899-ac59-e7a30816fb41)
   )
