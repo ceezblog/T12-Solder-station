@@ -50,7 +50,7 @@ Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
 - Only three libraries are used: **avr/interrupt.h, EEPROM.h and LiquidCrystal.h**
 - Thermocouple in T12 tip is unknown, not K-type nor C-type, so you can't really use off-the-shelf themocouple amplifier
 - I calibrate it by tabulating ADC readings against multiple temperatures, then plotting the chart in excel to find the trend equation: T = ADC*0.403 + 49.6
-- The thermal formular T = ADC*0.403 + 49.6 only applies to the amplifier that has gain of 471V/V
+- This formular only applies to the amplifier that has gain of 471V/V and 8ohm T12 tip 
 - The downside of 10bit ADC is we cannot measure anything below 48mV which is around 50°C
 - This guy has some nice work on debunk the myth T12 tip is K-type https://hackaday.io/project/94905-hakko-revenge/log/144548-hakko-t12-thermocouple-is-not-type-k
 - Mine is a bit glitchy with EEPROM, sometime it doesn't remember docking function is ON after power off
