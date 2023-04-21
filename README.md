@@ -58,7 +58,7 @@ Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
 
 ## 7. T12 Handle
 - It would work with pretty much any T12 handle you can buy, but the stand probably won't accept many of them
-- There are 2 stand designs for different handle, check the cross section diameter of the handle
+- I have 2 stand designs for handles I have, check the cross section diameter of the handle before print
 - If you want the original aviation GX plug come with the handle, then just short J5 by a jumper and by-pass check for handle
 
  
