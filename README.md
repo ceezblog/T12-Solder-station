@@ -2,15 +2,16 @@
 
 Just another Solder station using ATMega328 (or variant)
 
-1. Main board
-![Schematic](PCB/Diagram.png)
+## 1. Main board
+<img src='PCB/Diagram.png' width='70%'>
+Schematic here [SolderStation_r0.4.pdf](SolderStation_r0.4.pdf).
 
+## 2. PSU
+![24V-4A switching power supply](PSU/WX-DC2412_24V_4A.jpg | width=200)
+    SolderStation_r0.4.pdf
 
-2. PSU
-![Schematic](PSU/WX-DC2412_24V_4A.jpg)
-
-4. Display
+## 4. Display
 LCD0802
 
 
-6. Enclosure
+## 6. Enclosure
