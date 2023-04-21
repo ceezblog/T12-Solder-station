@@ -3,11 +3,11 @@
 Just another Solder station using ATMega328 (or variant)
 
 ## 1. Main board
-- Support only T12 tip that has 4ohm heater
+- Support only T12 tip that has ~4ohm~ 8ohm heater
 - Only work with ATMega168, ATMega328 or newer ATMega328PB
 - Use IRF4905 (P-channel) to turn on/off heat element
-- Use LMV321 for amplifier Thermocouple voltage
-- Using buck converter and linear regulator for high efficiency
+- Use LMV321 for amplifier Thermocouple voltage, not the best but cheap and reliable
+- Using buck converter and linear regulator combo for high efficiency
 - Use homemade opto switch, just a pair of IR LED and IR Reciever Diode (or phototransistor)
 - Encoder to control the temperature
 <img src='PCB/Diagram.png' width='40%' alt='schematic'/>
