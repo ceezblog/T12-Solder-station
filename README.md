@@ -33,15 +33,6 @@ Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
 - Include opto switch housing, just need a pair of IR LED and IR receiver diode.
  <img src='Enclosure/T12 box.png' width=600px alt='3D printed Enclosure'/>
  
- 
- ## 6. Put everything together
-<img src='Enclosure/1.jpg' width=30%/>
-<img src='Enclosure/2.jpg' width=30%/>
-<img src='Enclosure/3.jpg' width=30%/>
-<img src='Enclosure/4.jpg' width=30%/>
-<img src='Enclosure/5.jpg' width=30%/>
-<img src='Enclosure/6.jpg' width=30%/>
-
 
 ## 6. Firmware and calibration
 - Only ATMega328 and variant is support because of low level code to config timer, pwm, interrupts...
@@ -50,3 +41,11 @@ Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
 - I calibrated it by tabulating ADC readings against multiple temperatures, then plot the chart in excel and find the trend equation T = ADC*0.403 + 49.6
 - So, about 2% different from K-type, not so bad since I don't use 0.01% resistor for the Amplifier
 
+ 
+ ## 7. Put everything together
+<img src='Enclosure/1.jpg' width=30%/>
+<img src='Enclosure/2.jpg' width=30%/>
+<img src='Enclosure/3.jpg' width=30%/>
+<img src='Enclosure/4.jpg' width=30%/>
+<img src='Enclosure/5.jpg' width=30%/>
+<img src='Enclosure/6.jpg' width=30%/>
