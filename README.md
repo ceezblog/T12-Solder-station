@@ -62,7 +62,7 @@ Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
 - If you want the original aviation GX plug come with the handle, then just short J5 by a jumper and by-pass check for handle
 
  
- ## 7. Put everything together
+ ## 8. Put everything together
 <img src='Enclosure/Assembled 1.jpg' width=30%/> <img src='Enclosure/Assembled 2.jpg' width=30%/> <img src='Enclosure/Assembled 3.jpg' width=30%/>
 <img src='Enclosure/Assembled 4.jpg' width=30%/> <img src='Enclosure/Assembled 5.jpg' width=30%/> <img src='Enclosure/Assembled 6.jpg' width=30%/>
 
