@@ -65,4 +65,5 @@ Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
  ## 8. Put everything together
 <img src='Enclosure/Assembled 1.jpg' width=30%/> <img src='Enclosure/Assembled 2.jpg' width=30%/> <img src='Enclosure/Assembled 3.jpg' width=30%/>
 <img src='Enclosure/Assembled 4.jpg' width=30%/> <img src='Enclosure/Assembled 5.jpg' width=30%/> <img src='Enclosure/Assembled 6.jpg' width=30%/>
+<img src='Enclosure/T12 solder station_1.jpg' width=30% alt='3D printed Enclosure'/> <img src='Enclosure/T12 solder station_2.jpg' width=30% alt='3D printed Enclosure'/> <img src='Enclosure/T12 solder station_3.jpg' width=30% alt='3D printed Enclosure'/> 
 
