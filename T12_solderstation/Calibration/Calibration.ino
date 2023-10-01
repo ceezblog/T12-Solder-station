@@ -150,7 +150,7 @@ void lcd_A()
 
 #define TIP_AN A0 // tip voltage
 #define TIP_PWM 9 // D9
-#define NUM_OF_SAMPLE 4
+//#define NUM_OF_SAMPLE 4
 #define SLEEP_T 100 // sleep temperature 60*C
 
 //setup timer1 for PWM at D9
@@ -181,16 +181,16 @@ void read_T12()
 // increase target temp
 void initOpto()
 {
-  digitalWrite(IR_LED, LOW);
+  digitalWrite(IR_LED, LOW); //turn off IR_LED
   pinMode(OPTO, INPUT);
   pinMode(IR_LED, OUTPUT);
 }
 
 bool isDocking()
 {
-  digitalWrite(IR_LED, HIGH);
+  digitalWrite(IR_LED, HIGH); //turn on IR_LED
   bool ret = !digitalRead(OPTO); //if LOW == SLEEP
-  digitalWrite(IR_LED, HIGH);
+  digitalWrite(IR_LED, LOW); //turn off IR_LED
   return ret;
 }
 
