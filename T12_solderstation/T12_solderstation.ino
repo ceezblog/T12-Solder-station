@@ -61,7 +61,13 @@ byte backc[8] = {B00000,B00010,B00110,B01110,B01110,B00110,B00010,B00000};
 
 #define DOCK_TEMPERATURE 100
 #define NUMSAMPLES 8
-#define SLEEP_T 100 // sleep temperature 100*C
+
+#define SLEEP_T1 200 	// sleep temperature 200*C when docked
+#define SLEEP_T2 100	// sleep temperature after 2 minutes
+#define SLEEP_T3 0		// sleep temperature after 15 minutes // turn off heater completely
+
+#define DOCK_TIMEOUT1	120000 	// 2*60=120 // 2 minutes
+#define DOCK_TIMEOUT2	900000	// 15*60=900 // 15 minutes
 
 
 // UPDATE RATE
@@ -118,6 +124,11 @@ unsigned long btUp_tm;
 unsigned long rot_next_tm;   
 unsigned long rot_prev_tm;
 
+// docking timeout
+unsigned long dock_tm;
+uint8_t dock_cnt; 	//count how many times docking to determine docking function
+uint8_t dock_last_status;
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -146,7 +157,7 @@ void setup() {
   bAirUpdate = true;
   bAir = true;
   target_T = eepromRead_T();
-  bEnableOpto = eepromRead_Opto();
+  bEnableOpto = (eepromRead_Opto()>0)? true: false;
 
   //init PWM for controlling Heat element
   initPWM_Tip();
@@ -175,11 +186,7 @@ void loop()
   {
     bIsLongPress = false;
     bEnableOpto = !bEnableOpto;
-    eepromWrite_Opto(bEnableOpto);
-    lcdOpto();
-    delay(1000);
-    lcd_T();
-    lcdSet_T();
+    updateOpto();
   }
 
   if (BT_PREV_STATE == LOW && millis() - btDown_tm > 3000)
@@ -196,7 +203,32 @@ void loop()
     bOptoCheck = false; //done update
     
     bSleep = isDocking();
-    if (!bEnableOpto) bSleep = false;
+    
+    if (dock_last_status != bSleep) // if docking status changed
+    {
+      if (bSleep == true) dock_tm = millis(); // write down timestamp
+      if (dock_cnt < 3)
+      {
+        dock_last_status = bSleep;
+        dock_cnt++;
+        if (dock_cnt >=3 ) 
+        {
+          bEnableOpto = true; // turn on opto feature
+          updateOpto();
+        }
+      }
+    }
+    
+    if (!bEnableOpto) //if opto disbale
+    {
+      bSleep = false;
+    }
+    else  // if opto enable
+    {
+      // check for timeout
+
+    }
+
   }
   
   if (bHUpdate) 
@@ -335,6 +367,15 @@ void eepromWrite_Opto(bool enable)
   else EEPROM.write(ADDR_OPTO, 0);
 }
 
+void updateOpto()
+{
+  eepromWrite_Opto(bEnableOpto);
+  lcdOpto();
+  delay(1000);
+  lcd_T();
+  lcdSet_T();
+}
+  
 
 ////////////////////////////////
 // T12 tip: read temp/ PWM out
@@ -397,7 +438,8 @@ void minus_T()
   bSetUpdate = 1;
 }
 
-/// UPDATE T12 Temp
+// UPDATE T12 Temp
+// close loop control from tip temperature feedback
 bool tipUpdate()
 {
   int pwm_power;
@@ -405,10 +447,16 @@ bool tipUpdate()
   delay(100); //let the temp settle down, stray voltage goes away
 
   tip_T = read_T12();  
-  int16_t dT = tip_T;
+  int16_t dT = tip_T; // dT = amount of temperature to reach to target from current tip temperature
 
-  //limit temp to SLEEP_T (100degC)
-  if (bSleep) dT = SLEEP_T - dT;
+  //limit temp to sleep_T if sleep is acrive
+
+  int16_t sleep_T = SLEEP_T1;                                 // 200degC
+  if (millis() - dock_tm > DOCK_TIMEOUT1) sleep_T = SLEEP_T2; // 100degC
+  if (millis() - dock_tm > DOCK_TIMEOUT2) sleep_T = SLEEP_T3; // 0degC
+  
+  // if sleep is active
+  if (bSleep) dT = (sleep_T > dT) ? sleep_T - dT : 0; // if sleep Temp > dT  otherwise turn off power by 
   else dT = target_T - dT;
   
   if (dT > 50) pwm_power = 255;
@@ -436,9 +484,10 @@ void initOpto()
 
 bool isDocking()
 {
-  digitalWrite(IR_LED, HIGH);
-  bool ret = digitalRead(OPTO); //if HIGH == SLEEP
-  digitalWrite(IR_LED, HIGH);
+  digitalWrite(IR_LED, HIGH); 		//turn on IR_LED
+  bool ret = digitalRead(OPTO); 	//if HIGH == SLEEP
+  digitalWrite(IR_LED, LOW); 		//turn off IR_LED
+  
   return ret;
 }
 
