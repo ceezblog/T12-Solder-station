@@ -62,9 +62,9 @@ byte backc[8] = {B00000,B00010,B00110,B01110,B01110,B00110,B00010,B00000};
 #define DOCK_TEMPERATURE 100
 #define NUMSAMPLES 8
 
-#define SLEEP_T1 200 	// sleep temperature 200*C when docked
-#define SLEEP_T2 100	// sleep temperature after 2 minutes
-#define SLEEP_T3 0		// sleep temperature after 15 minutes // turn off heater completely
+#define DOCK_T1 200 	// sleep temperature 200*C when docked
+#define DOCK_T2 100	// sleep temperature after 2 minutes
+#define DOCK_T3 0		// sleep temperature after 15 minutes // turn off heater completely
 
 #define DOCK_TIMEOUT1	120000 	// 2*60=120 // 2 minutes
 #define DOCK_TIMEOUT2	900000	// 15*60=900 // 15 minutes
@@ -223,11 +223,7 @@ void loop()
     {
       bSleep = false;
     }
-    else  // if opto enable
-    {
-      // check for timeout
-
-    }
+    // check for timeout and set corect temp in tipUpdate()
 
   }
   
@@ -451,20 +447,23 @@ bool tipUpdate()
 
   //limit temp to sleep_T if sleep is acrive
 
-  int16_t sleep_T = SLEEP_T1;                                 // 200degC
-  if (millis() - dock_tm > DOCK_TIMEOUT1) sleep_T = SLEEP_T2; // 100degC
-  if (millis() - dock_tm > DOCK_TIMEOUT2) sleep_T = SLEEP_T3; // 0degC
+  int16_t sleep_T = DOCK_T1;                                 // 200degC
+  if (millis() - dock_tm > DOCK_TIMEOUT1) sleep_T = DOCK_T2; // 100degC
+  if (millis() - dock_tm > DOCK_TIMEOUT2) sleep_T = DOCK_T3; // 0degC
   
   // if sleep is active
-  if (bSleep) dT = (sleep_T > dT) ? sleep_T - dT : 0; // if sleep Temp > dT  otherwise turn off power by 
-  else dT = target_T - dT;
+  if (bSleep) dT = sleep_T - tip_T; 
+  else dT = target_T - tip_T;
   
-  if (dT > 50) pwm_power = 255;
+  if (dT > 50) pwm_power = 255; // if over 50degC different, full power
   else 
   {
-    if (dT<=0) pwm_power = 0;
-    else pwm_power = dT*255/50;
+    if (dT<=0) pwm_power = 0;   // if Target T is lower than current T, power = 0
+    else pwm_power = dT*255/50; // doing some PID thing (Proportional, Integral, Derivative), except without D (Derivative = predict the future)
   }
+
+  // Some note: PID only works best with stable load, with unstable load like massive ground plane, PID will struggle a bit
+  // so, slightly overshoot is more desirable and better response with high load
 
   if (tip_T>550 || tip_T <= 0) bTipFail = true;
 
