@@ -206,17 +206,29 @@ void loop()
     
     if (dock_last_status != bSleep) // if docking status changed
     {
-      if (bSleep == true) dock_tm = millis(); // write down timestamp
-      if (dock_cnt < 3)
+      dock_last_status = bSleep;    // update new docking status
+      
+      if (bSleep == true)
       {
-        dock_last_status = bSleep;
-        dock_cnt++;
-        if (dock_cnt >=3 ) 
+        if (millis() - dock_tm > 500)   // only count if between two docking time is 500ms
         {
-          bEnableOpto = true; // turn on opto feature
-          updateOpto();
-        }
-      }
+          if (dock_cnt < 3 && bEnableOpto == false)
+          {
+            dock_cnt++;
+            if (dock_cnt >=3 ) 
+            {
+              bEnableOpto = true; // turn on opto feature
+              updateOpto();
+              dock_cnt = 0;
+            }
+          }
+          else 
+          {
+            dock_cnt = 0;
+          }
+        } 
+        dock_tm = millis(); // write down timestamp only when docking is true
+      }      
     }
     
     if (!bEnableOpto) //if opto disbale
@@ -451,6 +463,9 @@ bool tipUpdate()
   if (millis() - dock_tm > DOCK_TIMEOUT1) sleep_T = DOCK_T2; // 100degC
   if (millis() - dock_tm > DOCK_TIMEOUT2) sleep_T = DOCK_T3; // 0degC
   
+  // sleep temperature should not exceed target temperature
+  if (sleep_T > target_T) sleep_T = target_T;
+
   // if sleep is active
   if (bSleep) dT = sleep_T - tip_T; 
   else dT = target_T - tip_T;
@@ -483,9 +498,10 @@ void initOpto()
 
 bool isDocking()
 {
-  digitalWrite(IR_LED, HIGH); 		//turn on IR_LED
-  bool ret = digitalRead(OPTO); 	//if HIGH == SLEEP
-  digitalWrite(IR_LED, LOW); 		//turn off IR_LED
+  digitalWrite(IR_LED, HIGH); 		// turn on IR_LED
+  bool ret = digitalRead(OPTO); 	// if HIGH == SLEEP
+  //delay(10);                      // work around if digitalRead doesn't block
+  digitalWrite(IR_LED, LOW); 		  // turn off IR_LED
   
   return ret;
 }
