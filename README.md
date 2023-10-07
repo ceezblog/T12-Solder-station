@@ -57,7 +57,7 @@ Pdf version here <a href='PCB/SolderStation_r0.5.pdf'>SolderStation_r0.5.pdf</a>
 - Mine is a bit glitchy with EEPROM, sometime it doesn't remember docking function is ON after power off
 - Doesn't implement any thermal runaway protection, but code such feature is not that hard:
   + At every tick, check if temp increase while powering - Heater dead or  wrong pin connected if temperature stays the same
-  + Check temperature different if too great after 3-5s heat up - Probably different thermocouple in the tip
+  + Check temperature difference if too great after 3-5s heat up - Probably different thermocouple in the tip
  
 ## 7. T12 Handle
 - It would work with pretty much any T12 handle you can buy, but the stand probably won't accept many of them
