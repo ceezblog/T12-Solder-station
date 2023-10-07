@@ -13,7 +13,7 @@ Just another Solder station using ATMega328 (or variant)
 - Only need 2 wires to the tip's heat element
 
 <img src='PCB/Diagram.png' width='50%' alt='schematic'/>
-Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
+Pdf version here <a href='PCB/SolderStation_r0.5.pdf'>SolderStation_r0.5.pdf</a>
 
 
 ## 2. Switching PSU
@@ -45,17 +45,20 @@ Pdf version here <a href='SolderStation_r0.4.pdf'>SolderStation_r0.4.pdf</a>
 <img src='Enclosure/opto sensor.png' width=600px alt='3D printed Enclosure'/>
 
 ## 6. Firmware and calibration
+- Using Arduino IDE and MiniCore for ATMEGA328PB (new variant that you can buy readily these day - 2023) while classic Arduino is ATMEGA328
 - There are main firmware and calibration firmware for you to play with your own calibration
 - Only ATMega328 and variant is supported because of low level code to config timer, pwm, interrupts...
 - Only three libraries are used: **avr/interrupt.h, EEPROM.h and LiquidCrystal.h**
 - Thermocouple in T12 tip is unknown, not K-type nor C-type, so you can't really use off-the-shelf themocouple amplifier
 - I calibrate it by tabulating ADC readings against multiple temperatures, then plotting the chart in excel to find the trend equation: T = ADC*0.403 + 49.6
-- This formular only applies to the amplifier that has gain of 471V/V and 8ohm T12 tip 
+- This formular only applies to the amplifier that has gain of 471V/V and 8ohm T12 tip, if you have 4ohm tip, use with caution
 - The downside of 10bit ADC is we cannot measure anything below 48mV which is around 50°C
 - This guy has some nice work on debunk the myth T12 tip is K-type https://hackaday.io/project/94905-hakko-revenge/log/144548-hakko-t12-thermocouple-is-not-type-k
 - Mine is a bit glitchy with EEPROM, sometime it doesn't remember docking function is ON after power off
-
-
+- Doesn't implement any thermal runaway protection, but code such feature is not that hard:
+  + At every tick, check if temp increase while powering - Heater dead or  wrong pin connected if temperature stays the same
+  + Check temperature different if too great after 3-5s heat up - Probably different thermocouple in the tip
+ 
 ## 7. T12 Handle
 - It would work with pretty much any T12 handle you can buy, but the stand probably won't accept many of them
 - I have 2 stand designs for handles I have, check the cross section diameter of the handle before print
