@@ -3,7 +3,7 @@
 //	Cee'z 30 Mar 2023
 //
 //	///////////////   ////////////////
-//	//  T12 v0.1 //   //  T< 200*C  //
+//	//  T12 v0.5 //   //  T< 200*C  //
 //	//   by Ceez //   //  H> 200*C  //
 //	///////////////   ////////////////
 //
@@ -127,7 +127,7 @@ unsigned long rot_prev_tm;
 // docking timeout
 unsigned long dock_tm;
 uint8_t dock_cnt; 	//count how many times docking to determine docking function
-uint8_t dock_last_status;
+bool dock_last_status;
 
 
 void setup() {
@@ -143,7 +143,7 @@ void setup() {
 
   // Print a message to the LCD.
   lcd.setCursor(0, 0);
-  lcd.print("T12 v0.1");
+  lcd.print("T12 v0.5");
   lcd.setCursor(0, 1);
   lcd.print(" by Ceez");  
   
@@ -204,30 +204,23 @@ void loop()
     
     bSleep = isDocking();
     
-    if (dock_last_status != bSleep) // if docking status changed
+    if (dock_last_status != bSleep && millis() - dock_tm > 500) // if docking status changed over 0.5s
     {
       dock_last_status = bSleep;    // update new docking status
-      
-      if (bSleep == true)
+      dock_tm = millis();           // write down timestamp only when docking
+      if (bSleep == true && bEnableOpto == false) // only do thing when docking, not undocking and docking is OFF
       {
-        if (millis() - dock_tm > 500)   // only count if between two docking time is 500ms
-        {
-          if (dock_cnt < 3 && bEnableOpto == false)
+          if (dock_cnt <= 3)
           {
             dock_cnt++;
-            if (dock_cnt >=3 ) 
+            if (dock_cnt >= 3)
             {
               bEnableOpto = true; // turn on opto feature
               updateOpto();
               dock_cnt = 0;
             }
           }
-          else 
-          {
-            dock_cnt = 0;
-          }
-        } 
-        dock_tm = millis(); // write down timestamp only when docking is true
+          if (dock_cnt > 3) dock_cnt = 3;
       }      
     }
     
