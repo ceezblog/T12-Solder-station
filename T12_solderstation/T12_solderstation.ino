@@ -43,9 +43,9 @@
 LiquidCrystal lcd(LCD_RS, LCD_RW, LCD_EN, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 
 // custom chars
-byte nextc[8] = {B00000,B01000,B01100,B01110,B01110,B01100,B01000,B00000};
-byte stopc[8] = {B00000,B11011,B11011,B11011,B11011,B11011,B11011,B00000};
-byte backc[8] = {B00000,B00010,B00110,B01110,B01110,B00110,B00010,B00000};
+byte next_ch[8] = {B00000,B01000,B01100,B01110,B01110,B01100,B01000,B00000};
+byte stop_ch[8] = {B00000,B11011,B11011,B11011,B11011,B11011,B11011,B00000};
+byte back_ch[8] = {B00000,B00010,B00110,B01110,B01110,B00110,B00010,B00000};
 
 // Pin configuration
 #define TIP_AN A0 // tip voltage
@@ -130,6 +130,11 @@ uint8_t dock_cnt; 	//count how many times docking to determine docking function
 bool dock_last_status;
 
 
+// powering OPTO by an IO pin
+#define OPTO_ON() digitalWrite(IR_LED, HIGH)   
+#define OPTO_OFF() digitalWrite(IR_LED, LOW)
+#define isDocking() digitalRead(OPTO)
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
@@ -137,9 +142,9 @@ void setup() {
   //add custom char;
   lcd.begin(8, 2);
   lcd.clear();
-  lcd.createChar (0, nextc);
-  lcd.createChar (1, stopc);
-  lcd.createChar (2, backc);
+  lcd.createChar (0, next_ch);
+  lcd.createChar (1, stop_ch);
+  lcd.createChar (2, back_ch);
 
   // Print a message to the LCD.
   lcd.setCursor(0, 0);
@@ -484,21 +489,11 @@ bool tipUpdate()
 
 void initOpto()
 {
-  digitalWrite(IR_LED, LOW);
+  OPTO_OFF();
   pinMode(OPTO, INPUT_PULLUP);
   pinMode(IR_LED, OUTPUT);
+  OPTO_ON();
 }
-
-bool isDocking()
-{
-  digitalWrite(IR_LED, HIGH); 		// turn on IR_LED
-  bool ret = digitalRead(OPTO); 	// if HIGH == SLEEP
-  //delay(10);                      // work around if digitalRead doesn't block
-  digitalWrite(IR_LED, LOW); 		  // turn off IR_LED
-  
-  return ret;
-}
-
 
 ////////////////////////////////
 /// READ THERMISTOR
@@ -651,4 +646,4 @@ ISR (PCINT2_vect) // handle pin change interrupt for D0 to D7 here
     minus_T();
     rot_prev_tm = millis();
   }
-}  
+}
