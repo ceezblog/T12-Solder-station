@@ -12,7 +12,7 @@ Just another Solder station using ATMega328 (or variant)
 - Use homemade opto switch, just a pair of IR LED and IR Reciever Diode (or phototransistor)
 - Only need 2 wires to the tip's heat element
 
-<img src='PCB/Diagram.png' width='50%' alt='schematic'/>
+<img src='PCB/Diagram r0.5.png' width='50%' alt='schematic'/>
 Pdf version here <a href='PCB/SolderStation_r0.5.pdf'>SolderStation_r0.5.pdf</a>
 
 
