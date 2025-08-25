@@ -31,6 +31,8 @@ Pdf version here <a href='PCB/SolderStation_r0.5.pdf'>SolderStation_r0.5.pdf</a>
 - Only support LCD0802 - 8 char 2 line Character LCD, the main board was designed to piggyback on the LCD
 - It is possible to use SSD1306 display via I2C or bitbang SPI for ILI9341 display controller but I haven't written code for this. 
 - The 0802 is way nicer in my opinion
+- PCB was designed for direct PCB to PCB plug-in (dupon header male and female) to the 14pin version of LCD0802
+- There is 16pin version of LCD0802, which offset the pins.  2 extra pins for the backlight. This won't be direct plug-in but can be done with soldering tall header and bend all 14 pins so that 4 screws will match.
  
 <img src='LCD0802/lcd0802.jpg' width=30% alt='LCD0802'/>
 
@@ -63,7 +65,7 @@ Pdf version here <a href='PCB/SolderStation_r0.5.pdf'>SolderStation_r0.5.pdf</a>
 - It would work with pretty much any T12 handle you can buy, but the stand probably won't accept many of them
 - I have 2 stand designs for handles I have, check the cross section diameter of the handle before print
 - If you want the original aviation GX plug come with the handle, then just short J5 by a jumper and by-pass check for handle
-
+- A standalone iron handle stand <a href="https://ceezblog.com/revisit-my-homemade-t12-soldering-station">blog post at ceezblog.com</a>
  
  ## 8. Put everything together
 <img src='Enclosure/Assembled 1.jpg' width=30%/> <img src='Enclosure/Assembled 2.jpg' width=30%/> <img src='Enclosure/Assembled 3.jpg' width=30%/>
