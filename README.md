@@ -32,9 +32,14 @@ Pdf version here <a href='PCB/SolderStation_r0.5.pdf'>SolderStation_r0.5.pdf</a>
 - It is possible to use SSD1306 display via I2C or bitbang SPI for ILI9341 display controller but I haven't written code for this. 
 - The 0802 is way nicer in my opinion
 - PCB was designed for direct PCB to PCB plug-in (dupon header male and female) to the 14pin version of LCD0802
-- There is 16pin version of LCD0802, which offset the pins.  2 extra pins for the backlight. This won't be direct plug-in but can be done with soldering tall header and bend all 14 pins so that 4 screws will match.
- 
 <img src='LCD0802/lcd0802.jpg' width=30% alt='LCD0802'/>
+
+- There is 16pin version of LCD0802, which offset the pins. This won't be direct plug-in. It can be done but a bit of hack-ish solution:
+  - Solder a tall header (2x7) and bend all 14 metal pins in an awkward way so that 4 screws in the corner would be in the right spot.
+  - 2 extra pins (pin 15-16) are for the backlight and are not connected to controller blob. So the code won't be able to turn on/off backlight at will. There are 2 jumpers near the backlight LED (that connects to the LED and to the controller blob), just short those 2 jumpers and don't touch other jumpers. In my case, it is J3 and J4. Different vendors have different markings.
+  - While you are there, replace 0R with 330R to lower down backlight current draw as well. It probably is 100R and 0R which I find a bit high (about 25mA @ 5V for white LED). Comfortable range for a small LED like that is around 5-20mA which your eyes won't be able to tell the difference in brightness, but your phone's camera will say otherwise.
+
+<img src='LCD0802/lcd0802_backside.jpg' width=30% alt='LCD0802_backside'/>
 
 
 ## 5. Enclosure
@@ -56,9 +61,9 @@ Pdf version here <a href='PCB/SolderStation_r0.5.pdf'>SolderStation_r0.5.pdf</a>
 - This formular only applies to the amplifier that has gain of 471V/V and 8ohm T12 tip, if you have 4ohm tip, use with caution
 - The downside of 10bit ADC is we cannot measure anything below 48mV which is around 50°C
 - This guy has some nice work on debunk the myth T12 tip is K-type https://hackaday.io/project/94905-hakko-revenge/log/144548-hakko-t12-thermocouple-is-not-type-k
-- Mine is a bit glitchy with EEPROM, sometime it doesn't remember docking function is ON after power off
+- ~Mine is a bit glitchy with EEPROM, sometime it doesn't remember docking function is ON after power off~ I just had a bad M328PB chip
 - Doesn't implement any thermal runaway protection, but code such feature is not that hard:
-  + At every tick, check if temp increase while powering - Heater dead or  wrong pin connected if temperature stays the same
+  + At every tick, check if temp increase while powering - Heater dead or wrong pin connected if temperature stays the same
   + Check temperature difference if too great after 3-5s heat up - Probably different thermocouple in the tip
  
 ## 7. T12 Handle
